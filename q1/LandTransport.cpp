@@ -8,5 +8,5 @@ LandTransport::LandTransport(
 
 void LandTransport::getInfo() {
     Transport::getInfo();
-    cout << format("Кол-во колёс: {}", numWheels) << endl;
+    cout << format("Кол-во колёс: {}\n", numWheels);
 }

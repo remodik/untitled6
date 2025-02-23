@@ -6,15 +6,15 @@
 
 void AutonomousResearchSatellite::selfRepair() const {
     if (selfRepairCapability) {
-        cout << format("Запущено автоматическое исправление неисправностей с помощью ИИ версии {}", aiVersion) << endl;
+        cout << format("Запущено автоматическое исправление неисправностей с помощью ИИ версии {}\n", aiVersion);
     }
     else {
-        cout << "Для этого спутника автоисправление не доступно" << endl;
+        cout << "Для этого спутника автоисправление не доступно\n";
     }
 }
 
 void AutonomousResearchSatellite::getStatus() const {
     ScientificSatellite::getStatus();
     cout << format("Версия ИИ (Исскуственный Интеллект): {0}\n"
-                   "Возможность самовосстановления: {1}", aiVersion, (selfRepairCapability ? "Есть" : "Нету")) << endl;
+                   "Возможность самовосстановления: {1}\n", aiVersion, (selfRepairCapability ? "Есть" : "Нету"));
 }

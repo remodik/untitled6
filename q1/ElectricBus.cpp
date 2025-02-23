@@ -16,5 +16,5 @@ double ElectricBus::calculateEnergyConsumption(const double distance) const {
 
 void ElectricBus::getInfo() {
     PublicTransport::getInfo();
-    cout << format("Батарея: {0} кВт·ч, Время зарядки: {1} ч", batteryCapacity, chargeTime) << endl;
+    cout << format("Батарея: {0} кВт·ч, Время зарядки: {1} ч\n", batteryCapacity, chargeTime);
 }

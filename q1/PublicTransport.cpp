@@ -14,5 +14,5 @@ double PublicTransport::calculateRevenue(const int passengers) const {
 
 void PublicTransport::getInfo() {
     LandTransport::getInfo();
-    cout << format("Маршрут: {0}, Цена билета: {1} руб.", routeNumber, ticketPrice) << endl;
+    cout << format("Маршрут: {0}, Цена билета: {1} руб.\n", routeNumber, ticketPrice);
 }

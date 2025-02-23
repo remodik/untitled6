@@ -12,7 +12,7 @@ protected:
 public:
     Transport(int cap, double spd);
     void getInfo();
-    ~Transport() {}
+    ~Transport();
 };
 
 
