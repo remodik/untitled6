@@ -1,0 +1,45 @@
+#include <windows.h>
+#include "QueryProcessorFactory.h"
+#include "Logger.h"
+#include <vector>
+#include <future>
+#include <chrono>
+
+int main() {
+    SetConsoleOutputCP(CP_UTF8);
+    Logger logger("logs.txt");
+
+    QueryProcessorFactory factory;
+
+    vector<string> queries = {
+        "Загрузить текстовый файл",
+        "Загрузить изображение",
+        "Запрос к базе данных"
+    };
+
+    vector<future<void>> futures;
+
+    for (const auto &query : queries) {
+        try {
+            string type = (query.find("изображение") != string::npos) ? "Image" :
+                               (query.find("текст") != string::npos) ? "Text" : "Database";
+
+            const auto processor = factory.createProcessor(type);
+
+            logger.log("Начало обработки запроса: " + query);
+
+            futures.push_back(processor->processQuery(query));
+
+        } catch (const exception &e) {
+            logger.log(string("Ошибка: ") + e.what());
+        }
+    }
+
+    for (auto &f : futures) {
+        f.get();
+    }
+
+    logger.log("Все запросы обработаны.");
+
+    return 0;
+}
