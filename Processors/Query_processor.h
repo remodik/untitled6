@@ -6,6 +6,9 @@
 #include <memory>
 #include <future>
 
+using namespace std;
+
+
 class QueryProcessor {
 public:
     virtual ~QueryProcessor() = default;
