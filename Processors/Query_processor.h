@@ -6,12 +6,15 @@
 #include <memory>
 #include <future>
 
+using namespace std;
+
+
 class QueryProcessor {
 public:
     virtual ~QueryProcessor() = default;
 
-    virtual std::future<void> processQuery(const std::string &query) = 0;
-    [[nodiscard]] virtual std::string getType() const = 0;
+    virtual future<void> processQuery(const string &query) = 0;
+    [[nodiscard]] virtual string getType() const = 0;
 };
 
 #endif
