@@ -13,8 +13,8 @@ class Worker {
     double salary;
 
 public:
-    Worker(const string& fullName,const string& position, int hireYear, double salary)
-        : fio(fullName), position(position), year(hireYear), salary(salary) {}
+    Worker(const string& fio,const string& position, int hireYear, double salary)
+        : fio(fio), position(position), year(hireYear), salary(salary) {}
 
     string getPosition() const;
     int getExperience(int curYear) const;
