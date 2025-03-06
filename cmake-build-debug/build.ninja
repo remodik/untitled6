@@ -154,6 +154,48 @@ build CMakeFiles/untitled6.dir/abc_class.cpp.obj: CXX_COMPILER__untitled6_unscan
   OBJECT_DIR = CMakeFiles\untitled6.dir
   OBJECT_FILE_DIR = CMakeFiles\untitled6.dir
 
+build CMakeFiles/untitled6.dir/Engine/main.cpp.obj: CXX_COMPILER__untitled6_unscanned_Debug C$:/Users/slend/CLionProjects/untitled6/Engine/main.cpp || cmake_object_order_depends_target_untitled6
+  DEP_FILE = CMakeFiles\untitled6.dir\Engine\main.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/slend/CLionProjects/untitled6/q1 -IC:/Users/slend/CLionProjects/untitled6/q2 -IC:/Users/slend/CLionProjects/untitled6/q3
+  OBJECT_DIR = CMakeFiles\untitled6.dir
+  OBJECT_FILE_DIR = CMakeFiles\untitled6.dir\Engine
+
+build CMakeFiles/untitled6.dir/Examen/main.cpp.obj: CXX_COMPILER__untitled6_unscanned_Debug C$:/Users/slend/CLionProjects/untitled6/Examen/main.cpp || cmake_object_order_depends_target_untitled6
+  DEP_FILE = CMakeFiles\untitled6.dir\Examen\main.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/slend/CLionProjects/untitled6/q1 -IC:/Users/slend/CLionProjects/untitled6/q2 -IC:/Users/slend/CLionProjects/untitled6/q3
+  OBJECT_DIR = CMakeFiles\untitled6.dir
+  OBJECT_FILE_DIR = CMakeFiles\untitled6.dir\Examen
+
+build CMakeFiles/untitled6.dir/vectors/main.cpp.obj: CXX_COMPILER__untitled6_unscanned_Debug C$:/Users/slend/CLionProjects/untitled6/vectors/main.cpp || cmake_object_order_depends_target_untitled6
+  DEP_FILE = CMakeFiles\untitled6.dir\vectors\main.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/slend/CLionProjects/untitled6/q1 -IC:/Users/slend/CLionProjects/untitled6/q2 -IC:/Users/slend/CLionProjects/untitled6/q3
+  OBJECT_DIR = CMakeFiles\untitled6.dir
+  OBJECT_FILE_DIR = CMakeFiles\untitled6.dir\vectors
+
+build CMakeFiles/untitled6.dir/bookorker/main.cpp.obj: CXX_COMPILER__untitled6_unscanned_Debug C$:/Users/slend/CLionProjects/untitled6/bookorker/main.cpp || cmake_object_order_depends_target_untitled6
+  DEP_FILE = CMakeFiles\untitled6.dir\bookorker\main.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/slend/CLionProjects/untitled6/q1 -IC:/Users/slend/CLionProjects/untitled6/q2 -IC:/Users/slend/CLionProjects/untitled6/q3
+  OBJECT_DIR = CMakeFiles\untitled6.dir
+  OBJECT_FILE_DIR = CMakeFiles\untitled6.dir\bookorker
+
+build CMakeFiles/untitled6.dir/bookorker/book.cpp.obj: CXX_COMPILER__untitled6_unscanned_Debug C$:/Users/slend/CLionProjects/untitled6/bookorker/book.cpp || cmake_object_order_depends_target_untitled6
+  DEP_FILE = CMakeFiles\untitled6.dir\bookorker\book.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/slend/CLionProjects/untitled6/q1 -IC:/Users/slend/CLionProjects/untitled6/q2 -IC:/Users/slend/CLionProjects/untitled6/q3
+  OBJECT_DIR = CMakeFiles\untitled6.dir
+  OBJECT_FILE_DIR = CMakeFiles\untitled6.dir\bookorker
+
+build CMakeFiles/untitled6.dir/bookorker/worker.cpp.obj: CXX_COMPILER__untitled6_unscanned_Debug C$:/Users/slend/CLionProjects/untitled6/bookorker/worker.cpp || cmake_object_order_depends_target_untitled6
+  DEP_FILE = CMakeFiles\untitled6.dir\bookorker\worker.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/slend/CLionProjects/untitled6/q1 -IC:/Users/slend/CLionProjects/untitled6/q2 -IC:/Users/slend/CLionProjects/untitled6/q3
+  OBJECT_DIR = CMakeFiles\untitled6.dir
+  OBJECT_FILE_DIR = CMakeFiles\untitled6.dir\bookorker
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target untitled6
@@ -162,7 +204,7 @@ build CMakeFiles/untitled6.dir/abc_class.cpp.obj: CXX_COMPILER__untitled6_unscan
 #############################################
 # Link the executable untitled6.exe
 
-build untitled6.exe: CXX_EXECUTABLE_LINKER__untitled6_Debug CMakeFiles/untitled6.dir/main.cpp.obj CMakeFiles/untitled6.dir/q1/ElectricBus.cpp.obj CMakeFiles/untitled6.dir/q1/LandTransport.cpp.obj CMakeFiles/untitled6.dir/q1/PublicTransport.cpp.obj CMakeFiles/untitled6.dir/q1/Transport.cpp.obj CMakeFiles/untitled6.dir/q2/Archer.cpp.obj CMakeFiles/untitled6.dir/q2/Character.cpp.obj CMakeFiles/untitled6.dir/q2/EliteKnight.cpp.obj CMakeFiles/untitled6.dir/q2/Warrior.cpp.obj CMakeFiles/untitled6.dir/q2/Weapon.cpp.obj CMakeFiles/untitled6.dir/q3/AutonomousResearchSatellite.cpp.obj CMakeFiles/untitled6.dir/q3/CommunicationSatellite.cpp.obj CMakeFiles/untitled6.dir/q3/Satellite.cpp.obj CMakeFiles/untitled6.dir/q3/ScientificSatellite.cpp.obj CMakeFiles/untitled6.dir/abc_class.cpp.obj
+build untitled6.exe: CXX_EXECUTABLE_LINKER__untitled6_Debug CMakeFiles/untitled6.dir/main.cpp.obj CMakeFiles/untitled6.dir/q1/ElectricBus.cpp.obj CMakeFiles/untitled6.dir/q1/LandTransport.cpp.obj CMakeFiles/untitled6.dir/q1/PublicTransport.cpp.obj CMakeFiles/untitled6.dir/q1/Transport.cpp.obj CMakeFiles/untitled6.dir/q2/Archer.cpp.obj CMakeFiles/untitled6.dir/q2/Character.cpp.obj CMakeFiles/untitled6.dir/q2/EliteKnight.cpp.obj CMakeFiles/untitled6.dir/q2/Warrior.cpp.obj CMakeFiles/untitled6.dir/q2/Weapon.cpp.obj CMakeFiles/untitled6.dir/q3/AutonomousResearchSatellite.cpp.obj CMakeFiles/untitled6.dir/q3/CommunicationSatellite.cpp.obj CMakeFiles/untitled6.dir/q3/Satellite.cpp.obj CMakeFiles/untitled6.dir/q3/ScientificSatellite.cpp.obj CMakeFiles/untitled6.dir/abc_class.cpp.obj CMakeFiles/untitled6.dir/Engine/main.cpp.obj CMakeFiles/untitled6.dir/Examen/main.cpp.obj CMakeFiles/untitled6.dir/vectors/main.cpp.obj CMakeFiles/untitled6.dir/bookorker/main.cpp.obj CMakeFiles/untitled6.dir/bookorker/book.cpp.obj CMakeFiles/untitled6.dir/bookorker/worker.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\untitled6.dir
