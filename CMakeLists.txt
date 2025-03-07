@@ -10,6 +10,8 @@ file(GLOB SOURCES
         "q3/*.h"
         "Processors/*.cpp"
         "Processors/*.h"
+        "project/*.h"
+        "project/*.cpp"
 )
 
 set(CMAKE_CXX_STANDARD 20)
@@ -22,7 +24,10 @@ add_executable(untitled6 main.cpp ${SOURCES} abc_class.cpp
         bookorker/book.cpp
         bookorker/book.h
         bookorker/worker.cpp
-        bookorker/worker.h)
+        bookorker/worker.h
+        project/Heading.ixx
+        project/ProjectBudget.ixx
+        project/WorkBaseTime.ixx)
 
 include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/q1
