@@ -324,6 +324,4 @@ int main() {
     for (const auto bird : birds) {
         delete bird;
     }
-
-    return 0;
 }
