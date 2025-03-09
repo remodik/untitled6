@@ -1,193 +1,329 @@
+#include <algorithm>
 #include <iostream>
+#include <utility>
+#include <vector>
 using namespace std;
 
-// Задание 1: Транспортные средства
+// Задание 1
 class Vehicle {
+protected:
+    string make;
+    string model;
+    int year;
+
 public:
+    virtual ~Vehicle() = default;
+    Vehicle(string make, string model, const int year)
+        : make(std::move(make)), model(std::move(model)), year(year) {}
+
     virtual void move() {
-        cout << "Транспортное средство движется" << endl;
+        cout << "Транспортное средство " << make << " " << model << " " << year << " года движется" << endl;
+    }
+
+    virtual void stop() {
+        cout << "Транспортное средство " << make << " " << model << " " << year << " года останавливается" << endl;
     }
 };
 
-class Car : public Vehicle {
+class Car : virtual public Vehicle {
 public:
+    Car(const string& make, const string& model, const int year)
+        : Vehicle(make, model, year) {}
+
     void move() override {
-        cout << "Машина едет по дороге" << endl;
+        cout << "Автомобиль " << make << " " << model << " " << year << " года едет" << endl;
+    }
+
+    void stop() override {
+        cout << "Автомобиль " << make << " " << model << " " << year << " года останавливается" << endl;
     }
 };
 
-class Boat : public Vehicle {
+class Boat : virtual public Vehicle {
 public:
+    Boat(const string& make, const string& model, const int year)
+        : Vehicle(make, model, year) {}
+
     void move() override {
-        cout << "Лодка плывет по воде" << endl;
+        cout << "Лодка " << make << " " << model << " " << year << " года плывет" << endl;
+    }
+
+    void stop() override {
+        cout << "Лодка " << make << " " << model << " " << year << " года останавливается" << endl;
     }
 };
 
 class AmphibiousCar : public Car, public Boat {
 public:
-    void move() {
-        cout << "Амфибия может ехать по дороге и плыть по воде" << endl;
+    AmphibiousCar(const string& make, const string& model, const int year)
+    : Vehicle(make, model, year), Car(make, model, year), Boat(make, model, year) {}
+
+    void move() override {
+        cout << "Амфибийный автомобиль " << make << " " << model << " " << year << " года движется по суше и воде" << endl;
+    }
+
+    void stop() override {
+        cout << "Амфибийный автомобиль " << make << " " << model << " " << year << " года останавливается" << endl;
     }
 };
 
-// Задание 2: Люди и сотрудники
+// Задание 2
 class Person {
+protected:
+    string name;
+    int age;
+
 public:
-    virtual void introduce() {
-        cout << "Я человек" << endl;
+    virtual ~Person() = default;
+
+    Person(string name, const int age) : name(std::move(name)), age(age) {}
+
+    virtual void work() {
+        cout << name << ", возраст " << age << ", работает" << endl;
     }
 };
 
-class Employee : public Person {
+class Employee : virtual public Person {
 public:
-    void introduce() override {
-        cout << "Я работаю" << endl;
-    }
-    void work() {
-        cout << "Работаю в офисе" << endl;
+    Employee(const string& name, const int age) : Person(name, age) {}
+
+    void work() override {
+        cout << name << ", возраст " << age << ", работает на предприятии" << endl;
     }
 };
 
-class Student : public Person {
+class Student : virtual public Person {
 public:
-    void introduce() override {
-        cout << "Я учусь" << endl;
-    }
-    void study() {
-        cout << "Готовлюсь к экзамену" << endl;
+    Student(const string& name, const int age) : Person(name, age) {}
+
+    void work() override {
+        cout << name << ", возраст " << age << ", учится в университете" << endl;
     }
 };
 
-class Intern : public Employee, public Student {
+class Intern final : public Employee, public Student {
 public:
-    void introduce() override {
-        cout << "Я стажер" << endl;
-    }
-    void doInternship() {
-        cout << "Получаю опыт на стажировке" << endl;
+    Intern(const string& name, const int age) : Person(name, age), Employee(name, age), Student(name, age) {}
+
+    void work() override {
+        cout << name << ", возраст " << age << ", работает и учится одновременно" << endl;
     }
 };
 
-// Задание 3: Музыкальные инструменты
+
+// Задание 3
 class MusicInstrument {
+protected:
+    string name;
+    string type;
+
 public:
+    virtual ~MusicInstrument() = default;
+
+    MusicInstrument(string  name, string  type) : name(std::move(name)), type(std::move(type)) {}
+
     virtual void play() {
-        cout << "Игра на музыкальном инструменте" << endl;
+        cout << "Музыкальный инструмент " << name << " (" << type << ") издает звуки" << endl;
     }
 };
 
-class StringInstrument : public MusicInstrument {};
-class PercussionInstrument : public MusicInstrument {};
-
-class Guitar : public StringInstrument {
+class StringInstrument : public MusicInstrument {
 public:
+    explicit StringInstrument(const string& name) : MusicInstrument(name, "струнный") {}
+
     void play() override {
-        cout << "Бренчание на гитаре" << endl;
+        cout << "Струнный инструмент " << name << " издает звуки" << endl;
     }
 };
 
-class Drum : public PercussionInstrument {
+class PercussionInstrument : public MusicInstrument {
 public:
+    explicit PercussionInstrument(const string& name) : MusicInstrument(name, "ударный") {}
+
     void play() override {
-        cout << "Барабанный бой" << endl;
+        cout << "Ударный инструмент " << name << " издает звуки" << endl;
     }
 };
 
-class MultiInstrumentalist : public Guitar, public Drum {
+class Guitar final : public StringInstrument {
 public:
-    void playBoth() {
-        cout << "Играю и на гитаре, и на барабанах" << endl;
+    Guitar() : StringInstrument("Гитара") {}
+
+    void play() override {
+        cout << "Гитара издает звуки" << endl;
     }
 };
 
-// Задание 4: Смартфон
+class Drum final : public PercussionInstrument {
+public:
+    Drum() : PercussionInstrument("Барабан") {}
+
+    void play() override {
+        cout << "Барабан издает звуки" << endl;
+    }
+};
+
+class MultiInstrumentalist final : public StringInstrument, public PercussionInstrument {
+public:
+    MultiInstrumentalist() : StringInstrument("Гитара"), PercussionInstrument("Барабан") {}
+
+    void play() override {
+        StringInstrument::play();
+        PercussionInstrument::play();
+        cout << "Мультиинструменталист играет на нескольких инструментах" << endl;
+    }
+};
+
+// Задание 4
 class Phone {
 public:
-    void call() {
-        cout << "Совершение звонка" << endl;
+    virtual ~Phone() = default;
+
+    virtual void makeCall(const string& number) {
+        cout << "Телефон совершает звонок на номер " << number << endl;
     }
 };
 
 class Computer {
 public:
-    void processData() {
-        cout << "Обработка данных" << endl;
+    virtual ~Computer() = default;
+
+    virtual void processData(const string& data) {
+        cout << "Компьютер обрабатывает данные: " << data << endl;
     }
 };
 
 class Smartphone : public Phone, public Computer {
 public:
-    void useApp() {
-        cout << "Открытие приложения" << endl;
+    void makeCall(const string& number) override {
+        cout << "Смартфон совершает звонок на номер " << number << endl;
     }
-    void browseInternet() {
-        cout << "Просмотр веб-страниц" << endl;
+
+    void processData(const string& data) override {
+        cout << "Смартфон обрабатывает данные: " << data << endl;
     }
 };
 
-// Задание 5: Птицы
+// Задание 5
 class Bird {
+protected:
+    string species;
+
 public:
-    virtual void makeSound() {
-        cout << "Чириканье птицы" << endl;
+    virtual ~Bird() = default;
+
+    explicit Bird(string  species) : species(std::move(species)) {}
+
+    virtual void move() {
+        cout << "Птица вида " << species << " перемещается" << endl;
     }
 };
 
 class FlyingBird : public Bird {
 public:
-    void fly() {
-        cout << "Птица взлетает в небо" << endl;
+    explicit FlyingBird(const string& species) : Bird(species) {}
+
+    void move() override {
+        cout << "Птица вида " << species << " летит" << endl;
     }
 };
 
 class NonFlyingBird : public Bird {
 public:
-    void walk() {
-        cout << "Птица гуляет по земле" << endl;
+    explicit NonFlyingBird(const string& species) : Bird(species) {}
+
+    void move() override {
+        cout << "Птица вида " << species << " ходит" << endl;
     }
 };
 
-class Penguin : public NonFlyingBird {
+class Penguin final : public NonFlyingBird {
 public:
-    void swim() {
-        cout << "Пингвин плавает в холодной воде" << endl;
+    Penguin() : NonFlyingBird("Пингвин") {}
+
+    void move() override {
+        cout << "Пингвин ходит" << endl;
     }
 };
 
-class Eagle : public FlyingBird {
+class Eagle final : public FlyingBird {
 public:
-    void hunt() {
-        cout << "Орел высматривает добычу" << endl;
+    Eagle() : FlyingBird("Орел") {}
+
+    void move() override {
+        cout << "Орел летит" << endl;
     }
 };
+
 
 int main() {
-    AmphibiousCar ac;
-    ac.move();
+    // Задание 1
+    cout << "Задание 1:" << endl;
+    Vehicle* v1 = new Car("Toyota", "Camry", 2020);
+    Vehicle* v2 = new Boat("Yamaha", "Jetboat", 2018);
+    Vehicle* v3 = new AmphibiousCar("Gibbs", "Quadski", 2015);
 
-    Intern intern;
-    intern.introduce();
-    intern.work();
-    intern.study();
-    intern.doInternship();
+    v1->move(); v1->stop();
+    v2->move(); v2->stop();
+    v3->move(); v3->stop();
 
-    MultiInstrumentalist musician;
-    musician.Guitar::play();
-    musician.Drum::play();
-    musician.playBoth();
+    delete v1;
+    delete v2;
+    delete v3;
 
-    Smartphone phone;
-    phone.call();
-    phone.processData();
-    phone.useApp();
-    phone.browseInternet();
+    // Задание 2
+    cout << "\nЗадание 2:" << endl;
+    Person* p1 = new Employee("Иван Иванов", 35);
+    Person* p2 = new Student("Мария Петрова", 20);
+    Person* p3 = new Intern("Алексей Сидоров", 22);
 
-    Eagle eagle;
-    eagle.fly();
-    eagle.hunt();
+    p1->work();
+    p2->work();
+    p3->work();
 
-    Penguin penguin;
-    penguin.walk();
-    penguin.swim();
+    delete p1;
+    delete p2;
+    delete p3;
 
+    // Задание 3
+    cout << "\nЗадание 3:" << endl;
+    MusicInstrument* i = new Guitar();
+    MusicInstrument* i2 = new Drum();
+    auto* i3 = new MultiInstrumentalist();
+
+    i->play();
+    i2->play();
+    i3->play();
+
+    delete i;
+    delete i2;
+    delete i3;
+
+    // Задание 4
+    cout << "\nЗадание 4:" << endl;
+    Phone* phone = new Smartphone();
+    Computer* comp = new Smartphone();
+
+    phone->makeCall("12345678");
+    comp->processData("Данные для обработки");
+
+    delete phone;
+    delete comp;
+
+    // Задание 5
+    cout << "\nЗадание 5:" << endl;
+    vector<Bird*> birds = {
+        new Penguin(),
+        new Eagle()
+    };
+
+    for (const auto bird : birds) {
+        bird->move();
+    }
+
+    for (const auto bird : birds) {
+        delete bird;
+    }
+
+    return 0;
 }
