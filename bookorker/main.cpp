@@ -5,7 +5,7 @@
 #include "Book.h"
 #include "Worker.h"
 using namespace std;
-int main() {
+/*int main() {
     vector<Book> books = {
         Book("Достоевский", "Преступление и наказание", "Эксмо", 1866, 10, 550),
         Book("Толстой", "Война и мир", "АСТ", 1869, 15, 1225),
@@ -29,4 +29,4 @@ int main() {
     printWorkersByExperience(workers, 10, currentYear);
     printWorkersBySalary(workers, 60000);
     printWorkersByPosition(workers, "Инженер");
-}
+}*/

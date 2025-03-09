@@ -14,9 +14,9 @@ protected:
     string position;
     double workTime{};
     double paymant{};
-public:
     ~Employee() = default;
 
+public:
     void setWorkTime();
     virtual void calc() = 0;
     virtual void printInfo() const = 0;

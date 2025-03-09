@@ -21,13 +21,11 @@ add_executable(untitled6 main.cpp ${SOURCES} abc_class.cpp
         Examen/main.cpp
         vectors/main.cpp
         bookorker/main.cpp
-        bookorker/book.cpp
-        bookorker/book.h
-        bookorker/worker.cpp
-        bookorker/worker.h
-        project/Heading.ixx
-        project/ProjectBudget.ixx
-        project/WorkBaseTime.ixx)
+        bookorker/Book.cpp
+        bookorker/Book.h
+        bookorker/Worker.cpp
+        bookorker/Worker.h
+        nasledovanie/main.cpp)
 
 include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/q1
