@@ -25,7 +25,10 @@ add_executable(untitled6 main.cpp ${SOURCES} abc_class.cpp
         bookorker/Book.h
         bookorker/Worker.cpp
         bookorker/Worker.h
-        nasledovanie/main.cpp)
+        nasledovanie/main.cpp
+        String/String.cpp
+        String/String.h
+        String/main.cpp)
 
 include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/q1

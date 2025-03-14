@@ -256,7 +256,7 @@ public:
 };
 
 
-int main() {
+/*int main() {
     // Задание 1
     cout << "Задание 1:" << endl;
     Vehicle* v1 = new Car("Toyota", "Camry", 2020);
@@ -325,3 +325,4 @@ int main() {
         delete bird;
     }
 }
+*/
