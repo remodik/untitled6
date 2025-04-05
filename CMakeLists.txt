@@ -28,7 +28,13 @@ add_executable(untitled6 main.cpp ${SOURCES} abc_class.cpp
         nasledovanie/main.cpp
         String/String.cpp
         String/String.h
-        String/main.cpp)
+        String/main.cpp
+        project/WorkBaseTime.h
+        project/ProjectBudget.h
+        project/Heading.h
+        project/Project.h
+        project/main.cpp
+        abc/main.cpp)
 
 include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/q1
