@@ -3,14 +3,13 @@
 #include "Programmer.h"
 #include "Heading.h"
 
-class TeamLeader final : public Programmer, public Heading {
+class TeamLeader : public Programmer, public Heading {
+    int programmersCount;
 public:
-    TeamLeader(const int id, const string &name, const double salary, const Project project)
-        : Programmer(id, name, salary, project) {}
-
+    TeamLeader(int id, const string& name, int salary);
+    void setProgrammersCount(int count);
     int calcHeads() override;
     void calc() override;
-    void printInfo() const override;
 };
 
 #endif

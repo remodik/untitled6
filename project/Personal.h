@@ -1,18 +1,26 @@
-#ifndef PESONAL_H
-#define PESONAL_H
+#ifndef PERSONAL_H
+#define PERSONAL_H
 
 #include "Employee.h"
-#include "WorkBaseTime.h"
 
-
-class Personal : public Employee, public WorkBaseTime {
-protected:
-    double salary;
+class Personal : public Employee {
 public:
-    Personal(const int id, const string &name, const string &position, const double salary)
-        : Employee(id, name, position), salary(salary) {}
+    Personal(int id, std::string name, Position pos, int salary) : Employee(id, name, pos, salary) {}
+    int calcBase(int s, int w) override;
+    int calcBonus() override;
+    void calc() override;
+    void printInfo() override;
+};
 
-    int calcBase(int salary, int wtime) override;
+class Cleaner : public Personal {
+public:
+    Cleaner(int id, std::string name, int salary) : Personal(id, name, CLEANER, salary) {}
+};
+
+class Driver : public Personal {
+public:
+    Driver(int id, std::string name, int salary)
+        : Personal(id, name, DRIVER, salary) {}
     int calcBonus() override;
 };
 

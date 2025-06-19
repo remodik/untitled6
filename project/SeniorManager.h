@@ -1,16 +1,11 @@
 #ifndef SENIORMANAGER_H
 #define SENIORMANAGER_H
+#include "Manager.h"
 
-#include "ProjectManager.h"
-
-class SeniorManager final : public ProjectManager {
+class SeniorManager : public Manager {
 public:
-    using ProjectManager::ProjectManager;
-    void calc() override;
-    void printInfo() const override;
-
-private:
-    static int calcBudgetPart(float part, int budget);
+    SeniorManager(int id, const string& name);
+    int calcHeads() override;
 };
 
 #endif

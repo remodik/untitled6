@@ -16,25 +16,7 @@ file(GLOB SOURCES
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(untitled6 main.cpp ${SOURCES} abc_class.cpp
-        Engine/main.cpp
-        Examen/main.cpp
-        vectors/main.cpp
-        bookorker/main.cpp
-        bookorker/Book.cpp
-        bookorker/Book.h
-        bookorker/Worker.cpp
-        bookorker/Worker.h
-        nasledovanie/main.cpp
-        String/String.cpp
-        String/String.h
-        String/main.cpp
-        project/WorkBaseTime.h
-        project/ProjectBudget.h
-        project/Heading.h
-        project/Project.h
-        project/main.cpp
-        abc/main.cpp)
+add_executable(untitled6 ${SOURCES} project/main.cpp)
 
 include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/q1
