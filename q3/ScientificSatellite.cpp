@@ -1,13 +1,32 @@
-//
-// Created by slend on 23.02.2025.
-//
+#include <iostream>
+#include <string>
 
-#include "ScientificSatellite.h"
+class ScientificSatellite {
+    std::string sensorType;
+    std::string researchField;
 
-void ScientificSatellite::getStatus() const{
-    cout << format("Тип датчика: {0}, Область исследований: {1}\n", sensorType, researchField);
-}
+public:
+    void initializeSatellite(const std::string& sensor, const std::string& field) {
+        sensorType = sensor;
+        researchField = field;
+        std::cout << "Спутник инициализирован с датчиком типа " << sensorType
+                  << " для области исследований " << researchField << ".\n";
+    }
 
-void ScientificSatellite::collectData() const {
-    cout << format("Сбор научных данных с использованием датчика типа {0} в области {1}.\n", sensorType, researchField);
-}
+    static void shutdownSatellite() {
+        std::cout << "Спутник завершает работу. Освобождение ресурсов...\n";
+    }
+
+    static void transmitData(const std::string& data) {
+        std::cout << "Передача данных: " << data << " на наземную станцию.\n";
+    }
+
+    void updateSensor(const std::string& newSensorType) {
+        sensorType = newSensorType;
+        std::cout << "Тип датчика обновлен на: " << sensorType << ".\n";
+    }
+
+    static void diagnoseIssues() {
+        std::cout << "Диагностика спутника: все системы работают корректно.\n";
+    }
+};

@@ -1,11 +1,6 @@
-//
-// Created by slend on 23.02.2025.
-//
-
 #ifndef SATELLITE_H
 #define SATELLITE_H
 #include <iostream>
-#include <format>
 using namespace std;
 
 class Satellite {
@@ -22,6 +17,4 @@ public:
     void getStatus() const;
 };
 
-
-
-#endif //SATELLITE_H
+#endif

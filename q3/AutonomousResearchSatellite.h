@@ -1,13 +1,8 @@
-//
-// Created by slend on 23.02.2025.
-//
-
 #ifndef AUTONOMOUSRESEARCHSATELLITE_H
 #define AUTONOMOUSRESEARCHSATELLITE_H
-#include <iostream>
 #include <format>
-
 #include "ScientificSatellite.h"
+
 using namespace std;
 
 class AutonomousResearchSatellite : public ScientificSatellite {
@@ -28,8 +23,7 @@ public:
 
     void selfRepair() const;
     void getStatus() const;
+    void monitorHealth() const;
 };
-
-
 
 #endif

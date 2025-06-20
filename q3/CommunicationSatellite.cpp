@@ -1,8 +1,5 @@
-//
-// Created by slend on 23.02.2025.
-//
-
 #include "CommunicationSatellite.h"
+#include <format>
 
 void CommunicationSatellite::transmitData() const {
     cout << format("Передача данных: Скорость {0} Мбит/с в диапазоне {1} МГц\n", dataRate, frequencyRange);

@@ -1,12 +1,7 @@
-//
-// Created by slend on 23.02.2025.
-//
-
 #ifndef COMMUNICATIONSATELLITE_H
 #define COMMUNICATIONSATELLITE_H
 #include "Satellite.h"
 #include <iostream>
-#include <format>
 using namespace std;
 
 class CommunicationSatellite : public Satellite {
@@ -28,4 +23,4 @@ public:
 
 
 
-#endif //COMMUNICATIONSATELLITE_H
+#endif

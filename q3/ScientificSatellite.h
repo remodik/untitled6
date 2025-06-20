@@ -1,7 +1,3 @@
-//
-// Created by slend on 23.02.2025.
-//
-
 #ifndef SCIENTIFICSATELLITE_H
 #define SCIENTIFICSATELLITE_H
 #include <iostream>
@@ -30,4 +26,4 @@ public:
 
 
 
-#endif //SCIENTIFICSATELLITE_H
+#endif
