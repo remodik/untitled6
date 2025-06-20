@@ -3,22 +3,22 @@
 
 class WorkBaseTime {
 public:
-    virtual int calcBase(int salary, int wtime) = 0;
+    virtual int calcBase(int salary, int worktime) = 0;
     virtual int calcBonus() = 0;
-    virtual ~WorkBaseTime() {}
+    virtual ~WorkBaseTime() = default;
 };
 
 class ProjectBudget {
 public:
-    virtual int calcBudgetPart(float part, int budget) = 0;
+    virtual int calcBudgetPart(double part, int budget) = 0;
     virtual int calcProAdditions() = 0;
-    virtual ~ProjectBudget() {}
+    virtual ~ProjectBudget() = default;
 };
 
 class Heading {
 public:
     virtual int calcHeads() = 0;
-    virtual ~Heading() {}
+    virtual ~Heading() = default;
 };
 
 #endif

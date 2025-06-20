@@ -1,24 +1,40 @@
 #ifndef ENGINEER_H
 #define ENGINEER_H
-#include "Employee.h"
-#include "Project.h"
+#include "Personal.h"
 #include "Interfaces.h"
+#include "Project.h"
 
-class Engineer : public Employee, public WorkBaseTime, public ProjectBudget {
+class Engineer : public Personal, public ProjectBudget {
 protected:
-    int salary;
-    Project* project;
+    Project* project{};
 
 public:
     Engineer(int id, const string& name, const string& position, int salary);
-    virtual ~Engineer() = default;
-
     void setProject(Project* prj);
+
+    int calcBudgetPart(double part, int budget) override;
+    int calcProAdditions() override = 0;
     void calc() override;
-    int calcBase(int salary, int worktime) override;
-    int calcBonus() override;
-    virtual int calcBudgetPart(float part, int budget) override;
-    virtual int calcProAdditions() override = 0;
+};
+
+class Programmer : public Engineer {
+public:
+    Programmer(int id, const string& name, int salary);
+    int calcProAdditions() override;
+};
+
+class Tester : public Engineer {
+public:
+    Tester(int id, const string& name, int salary);
+    int calcProAdditions() override;
+};
+
+class TeamLeader : public Engineer, public Heading {
+public:
+    TeamLeader(int id, const string& name, int salary);
+    int calcProAdditions() override;
+    int calcHeads() override;
+    void calc() override;
 };
 
 #endif

@@ -2,24 +2,29 @@
 #define MANAGER_H
 #include "Employee.h"
 #include "Interfaces.h"
-#include <vector>
 #include "Project.h"
+#include <vector>
 
-class Manager : public Employee, public ProjectBudget, public Heading {
+class ProjectManager : public Employee, public ProjectBudget, public Heading {
 protected:
     vector<Project*> projects;
-    vector<Employee*> team;
 
 public:
-    Manager(int id, const string& name, const string& position);
-    virtual ~Manager() = default;
-
+    ProjectManager(int id, const string& name, const string& position);
     void addProject(Project* prj);
-    void addTeamMember(Employee* emp);
+
+    int calcBudgetPart(double part, int budget) override;
+
+    int calcProAdditions() override;
+
+    int calcHeads() override;
     void calc() override;
-    virtual int calcBudgetPart(float part, int budget) override;
-    virtual int calcProAdditions() override;
-    virtual int calcHeads() override = 0;
+};
+
+class SeniorManager : public ProjectManager {
+public:
+    SeniorManager(int id, const string& name, const string& position);
+    void calc() override;
 };
 
 #endif

@@ -1,253 +1,298 @@
 #include <iostream>
-#include <string>
 #include <vector>
+#include <string>
+#include <algorithm>
+#include <fstream>
+#include "Employee.h"
+#include "Engineer.h"
+#include "Factory.h"
+#include "Manager.h"
+#include "Project.h"
 
-// Перечисление для ролей сотрудников
-enum Position {
-    PROJECT_MANAGER,
-    SENIOR_MANAGER,
-    TEAM_LEADER,
-    ENGINEER,
-    PROGRAMMER,
-    TESTER,
-    DRIVER,
-    CLEANER
-};
+using namespace std;
 
-// Абстрактный класс Heading
-class Heading {
-public:
-    virtual int calcHeads() = 0;
-    virtual ~Heading() {}
-};
+void addEmployeeToProject(const vector<Employee*>& staff, vector<Project>& projects) {
+    cout << "Enter employee ID: ";
+    int empId;
+    cin >> empId;
+    cin.ignore();
 
-// Абстрактный класс WorkBaseTime
-class WorkBaseTime {
-public:
-    virtual int calcBase(int salary, int wtime) = 0;
-    virtual int calcBonus() = 0;
-    virtual ~WorkBaseTime() {}
-};
+    cout << "Enter project name: ";
+    string projectName;
+    getline(cin, projectName);
 
-// Абстрактный класс ProjectBudget
-class ProjectBudget {
-public:
-    virtual int calcBudgetPart(float part, int budget) = 0;
-    virtual ~ProjectBudget() {}
-};
+    Employee* foundEmp = nullptr;
+    for (const auto emp : staff) {
+        if (emp->getId() == empId) {
+            foundEmp = emp;
+            break;
+        }
+    }
 
-// Абстрактный класс Project
-class Project {
-protected:
-    int id;
-public:
-    Project(int id) : id(id) {}
-    virtual int calcProAdditions() = 0;
-    virtual ~Project() {}
-};
+    if (!foundEmp) {
+        cout << "Employee not found!" << endl;
+        return;
+    }
 
-// Базовый класс Employee
-class Employee {
-protected:
-    int id;
-    std::string name;
-    Position position;
-    int worktime;
-    double payment;
-public:
-    Employee(int id, std::string name, Position pos, int worktime, double payment)
-        : id(id), name(name), position(pos), worktime(worktime), payment(payment) {}
-    virtual ~Employee() {}
-    void setWorkTime(int time) { worktime = time; }
-    virtual void calc() = 0;
-    virtual void printInfo() = 0;
-};
+    Project* targetProject = nullptr;
+    for (auto& prj : projects) {
+        if (prj.name == projectName) {
+            targetProject = &prj;
+            break;
+        }
+    }
 
-// Класс Personal, наследуется от Employee
-class Personal : public Employee {
-protected:
-    double salary;
-public:
-    Personal(int id, std::string name, Position pos, int worktime, double payment, double salary)
-        : Employee(id, name, pos, worktime, payment), salary(salary) {}
-    virtual int calcBase() = 0;
-};
+    if (!targetProject) {
+        cout << "Project not found!" << endl;
+        return;
+    }
 
-// Класс Engineer, наследуется от Personal
-class Engineer : public Personal {
-protected:
-    ProjectBudget* budget;
-public:
-    Engineer(int id, std::string name, Position pos, int worktime, double payment, double salary, ProjectBudget* budget)
-        : Personal(id, name, pos, worktime, payment, salary), budget(budget) {}
-    virtual int calcBudgetPart(float part, int budget) { return this->budget->calcBudgetPart(part, budget); }
-    virtual void calc() = 0;
-    virtual ~Engineer() { delete budget; }
-};
+    if (const string position = foundEmp->getPosition(); position == "Programmer" || position == "Tester" || position == "TeamLeader") {
+        if (const auto engineer = dynamic_cast<Engineer*>(foundEmp)) {
+            engineer->setProject(targetProject);
+            engineer->calc();
+            cout << "Engineer added to project successfully!" << endl;
+        }
+    }
+    else if (position == "ProjectManager" || position == "SeniorManager") {
+        if (const auto manager = dynamic_cast<ProjectManager*>(foundEmp)) {
+            manager->addProject(targetProject);
+            manager->calc();
+            cout << "Manager added to project successfully!" << endl;
+        }
+    }
+    else {
+        cout << "This employee type cannot be assigned to projects!" << endl;
+    }
+}
 
-// Класс Programmer, наследуется от Engineer
-class Programmer : public Engineer {
-public:
-    Programmer(int id, std::string name, Position pos, int worktime, double payment, double salary, ProjectBudget* budget)
-        : Engineer(id, name, pos, worktime, payment, salary, budget) {}
-    void calc() override {
-        payment = calcBase() + calcProAdditions();
-    }
-    int calcProAdditions() {
-        return 500; // Доплата за сложность задач
-    }
-    int calcBase() override {
-        return static_cast<int>(salary * worktime);
-    }
-    void printInfo() override {
-        std::cout << "Programmer ID: " << id << ", Name: " << name << ", Payment: " << payment << std::endl;
-    }
-};
+void printMenu() {
+    cout << "\n========== Staff Management System ==========\n";
+    cout << "1. Show all employees\n";
+    cout << "2. Show project employees\n";
+    cout << "3. Search by position\n";
+    cout << "4. Search by name\n";
+    cout << "5. Search by salary (>)\n";
+    cout << "6. Search by salary (<)\n";
+    cout << "7. Create project\n";
+    cout << "8. Add employee to project\n";
+    cout << "9. Change employee's project\n";
+    cout << "10. Save & Exit\n";
+    cout << "Enter your choice (1-10): ";
+}
 
-// Класс Tester, наследуется от Engineer
-class Tester : public Engineer {
-public:
-    Tester(int id, std::string name, Position pos, int worktime, double payment, double salary, ProjectBudget* budget)
-        : Engineer(id, name, pos, worktime, payment, salary, budget) {}
-    void calc() override {
-        payment = calcBase() + calcProAdditions();
+void assignToProject(Employee* emp, Project* prj) {
+    if (const auto engineer = dynamic_cast<Engineer*>(emp)) {
+        engineer->setProject(prj);
+    } else if (const auto manager = dynamic_cast<ProjectManager*>(emp)) {
+        manager->addProject(prj);
+    } else {
+        cout << "This employee type cannot be assigned to projects.\n";
     }
-    int calcProAdditions() {
-        return 400; // Доплата за количество найденных багов
-    }
-    int calcBase() override {
-        return static_cast<int>(salary * worktime);
-    }
-    void printInfo() override {
-        std::cout << "Tester ID: " << id << ", Name: " << name << ", Payment: " << payment << std::endl;
-    }
-};
+}
 
-// Класс Driver, наследуется от Personal
-class Driver : public Personal {
-public:
-    Driver(int id, std::string name, Position pos, int worktime, double payment, double salary)
-        : Personal(id, name, pos, worktime, payment, salary) {}
-    void calc() override {
-        payment = calcBase() + calcBonus();
+Project* findProject(const vector<Project>& projects, const string& name) {
+    for (auto& prj : projects) {
+        if (prj.name == name) return const_cast<Project*>(&prj);
     }
-    int calcBase() override {
-        return static_cast<int>(salary * worktime);
-    }
-    int calcBonus() {
-        return 200; // Бонус за количество поездок
-    }
-    void printInfo() override {
-        std::cout << "Driver ID: " << id << ", Name: " << name << ", Payment: " << payment << std::endl;
-    }
-};
+    return nullptr;
+}
 
-// Класс Cleaner, наследуется от Personal
-class Cleaner : public Personal {
-public:
-    Cleaner(int id, std::string name, Position pos, int worktime, double payment, double salary)
-        : Personal(id, name, pos, worktime, payment, salary) {}
-    void calc() override {
-        payment = calcBase();
-    }
-    int calcBase() override {
-        return static_cast<int>(salary * worktime);
-    }
-    void printInfo() override {
-        std::cout << "Cleaner ID: " << id << ", Name: " << name << ", Payment: " << payment << std::endl;
-    }
-};
+vector<Employee*> findProjectEmployees(const vector<Employee*>& staff,
+                                     const string& projectName) {
+    vector<Employee*> result;
 
-// Класс ProjectManager, наследуется от Employee и Heading
-class ProjectManager : public Employee, public Heading {
-protected:
-    Project* project;
-public:
-    ProjectManager(int id, std::string name, Position pos, int worktime, double payment, Project* proj)
-        : Employee(id, name, pos, worktime, payment), project(proj) {}
-    ~ProjectManager() { delete project; }
-    void calc() override {
-        payment = 1000 + calcHeads() * 100; // Зарплата зависит от количества подчиненных
+    for (auto emp : staff) {
+        if (string position = emp->getPosition(); position == "Programmer" ||
+                                                  position == "Tester" ||
+                                                  position == "TeamLeader" ||
+                                                  position == "ProjectManager" ||
+                                                  position == "SeniorManager") {
+            result.push_back(emp);
+            }
     }
-    int calcHeads() override {
-        return 5; // Пример: 5 подчиненных
-    }
-    void printInfo() override {
-        std::cout << "ProjectManager ID: " << id << ", Name: " << name << ", Payment: " << payment << std::endl;
-    }
-};
 
-// Класс SeniorManager, наследуется от ProjectManager
-class SeniorManager : public ProjectManager {
-protected:
-    std::vector<Project*> projects;
-public:
-    SeniorManager(int id, std::string name, Position pos, int worktime, double payment, Project* proj, std::vector<Project*> projs)
-        : ProjectManager(id, name, pos, worktime, payment, proj), projects(projs) {}
-    ~SeniorManager() {
-        for (auto p : projects) delete p;
-    }
-    void calc() override {
-        payment = 2000 + projects.size() * 500; // Зарплата зависит от количества проектов
-    }
-    void printInfo() override {
-        std::cout << "SeniorManager ID: " << id << ", Name: " << name << ", Payment: " << payment << std::endl;
-    }
-};
+    return result;
+}
 
-// Класс TeamLeader, наследуется от Employee и Heading
-class TeamLeader : public Employee, public Heading {
-public:
-    TeamLeader(int id, std::string name, Position pos, int worktime, double payment)
-        : Employee(id, name, pos, worktime, payment) {}
-    void calc() override {
-        payment = 800 + calcHeads() * 50; // Зарплата зависит от количества подчиненных
-    }
-    int calcHeads() override {
-        return 10; // Пример: 10 подчиненных
-    }
-    void printInfo() override {
-        std::cout << "TeamLeader ID: " << id << ", Name: " << name << ", Payment: " << payment << std::endl;
-    }
-};
-
-// Конкретный класс Project
-class ConcreteProject : public Project {
-public:
-    ConcreteProject(int id) : Project(id) {}
-    int calcProAdditions() override {
-        return 1000; // Дополнительные выплаты за проект
-    }
-};
-
-// Конкретный класс ProjectBudget
-class ConcreteProjectBudget : public ProjectBudget {
-public:
-    int calcBudgetPart(float part, int budget) override {
-        return static_cast<int>(part * budget); // Часть бюджета
-    }
-};
-
-// Главная функция
 int main() {
-    ProjectBudget* budget = new ConcreteProjectBudget();
-    Project* proj1 = new ConcreteProject(1);
-    Project* proj2 = new ConcreteProject(2);
+    vector<Employee*> staff;
+    vector<Project> projects;
 
-    std::vector<Employee*> employees;
-    employees.push_back(new Programmer(1, "Alice", PROGRAMMER, 40, 0, 50.0, budget));
-    employees.push_back(new Tester(2, "Bob", TESTER, 35, 0, 45.0, budget));
-    employees.push_back(new Driver(3, "Charlie", DRIVER, 20, 0, 30.0));
-    employees.push_back(new Cleaner(4, "David", CLEANER, 25, 0, 20.0));
-    employees.push_back(new ProjectManager(5, "Eve", PROJECT_MANAGER, 40, 0, proj1));
-    employees.push_back(new SeniorManager(6, "Frank", SENIOR_MANAGER, 40, 0, proj2, {proj1, proj2}));
-    employees.push_back(new TeamLeader(7, "Grace", TEAM_LEADER, 40, 0));
-
-    for (auto emp : employees) {
-        emp->calc();
-        emp->printInfo();
+    try {
+        staff = StaffFactory::makeStaff("staff.txt");
+        cout << "Loaded " << staff.size() << " employees from file.\n";
+    } catch (const exception& e) {
+        cerr << "Error loading staff: " << e.what() << endl;
+        return 1;
     }
 
-    for (auto emp : employees) delete emp;
-    return 0;
+    if (projects.empty()) {
+        projects.push_back({"Alpha", 1000000});
+        projects.push_back({"Beta", 750000});
+        projects.push_back({"Gamma", 500000});
+    }
+
+    for (const auto emp : staff) {
+        emp->setWorkTime(160);
+        emp->calc();
+    }
+
+    int choice;
+    do {
+        printMenu();
+        cin >> choice;
+        cin.ignore();
+
+        switch (choice) {
+            case 1: {
+                cout << "\n=== All Employees ===\n";
+                cout << "ID\tName\t\tPosition\t\tWorktime\tPayment\n";
+                cout << "--------------------------------------------------------\n";
+                for (const auto emp : staff) {
+                    emp->printInfo();
+                }
+                break;
+            }
+            case 2: {
+                string projectName;
+                cout << "Enter project name: ";
+                getline(cin, projectName);
+
+                auto projectStaff = findProjectEmployees(staff, projectName);
+                if (projectStaff.empty()) {
+                    cout << "No project employees found.\n";
+                } else {
+                    cout << "=== Project Employees ===\n";
+                    for (const auto emp : projectStaff) {
+                        emp->printInfo();
+                    }
+                }
+                break;
+            }
+            case 3: {
+                string position;
+                cout << "Enter position to search: ";
+                getline(cin, position);
+
+                cout << "\n=== Employees with Position " << position << " ===\n";
+                bool found = false;
+                for (const auto emp : staff) {
+                    if (emp->getPosition() == position) {
+                        emp->printInfo();
+                        found = true;
+                    }
+                }
+                if (!found) cout << "No employees found with position " << position << "\n";
+                break;
+            }
+            case 4: {
+                string name;
+                cout << "Enter name to search: ";
+                getline(cin, name);
+
+                cout << "\n=== Employees Matching \"" << name << "\" ===\n";
+                bool found = false;
+                for (const auto emp : staff) {
+                    if (emp->getName().find(name) != string::npos) {
+                        emp->printInfo();
+                        found = true;
+                    }
+                }
+                if (!found) cout << "No employees found matching \"" << name << "\"\n";
+                break;
+            }
+            case 5: {
+                int salary;
+                cout << "Enter minimum salary: ";
+                cin >> salary;
+
+                cout << "\n=== Employees Earning > $" << salary << " ===\n";
+                bool found = false;
+                for (const auto emp : staff) {
+                    if (emp->getPayment() > salary) {
+                        emp->printInfo();
+                        found = true;
+                    }
+                }
+                if (!found) cout << "No employees earn more than $" << salary << "\n";
+                break;
+            }
+            case 6: {
+                int salary;
+                cout << "Enter maximum salary: ";
+                cin >> salary;
+
+                cout << "\n=== Employees Earning < $" << salary << " ===\n";
+                bool found = false;
+                for (const auto emp : staff) {
+                    if (emp->getPayment() < salary) {
+                        emp->printInfo();
+                        found = true;
+                    }
+                }
+                if (!found) cout << "No employees earn less than $" << salary << "\n";
+                break;
+            }
+            case 7: {
+                string name;
+                int budget;
+                cout << "Enter new project name: ";
+                getline(cin, name);
+                cout << "Enter project budget: $";
+                cin >> budget;
+
+                projects.push_back({name, budget});
+                cout << "Project '" << name << "' created with budget $" << budget << "\n";
+                break;
+            }
+            case 8: {
+                addEmployeeToProject(staff, projects);
+                break;
+            }
+            case 9: {
+                int empId;
+                string newProjectName;
+                cout << "Enter employee ID to change project: ";
+                cin >> empId;
+                cin.ignore();
+
+                auto it = ranges::find_if(staff,
+                                          [empId](const Employee* e) { return e->getId() == empId; });
+
+                if (it == staff.end()) {
+                    cout << "Employee with ID " << empId << " not found.\n";
+                    break;
+                }
+
+                cout << "Enter new project name: ";
+                getline(cin, newProjectName);
+
+                Project* newPrj = findProject(projects, newProjectName);
+                if (!newPrj) {
+                    cout << "Project '" << newProjectName << "' not found.\n";
+                    break;
+                }
+
+                assignToProject(*it, newPrj);
+                (*it)->calc();
+                cout << "Employee " << (*it)->getName() << " moved to project " << newProjectName << "\n";
+                break;
+            }
+            case 10: {
+                try {
+                    StaffFactory::saveStaff("staff_updated.txt", staff);
+                    cout << "Data saved successfully. Exiting...\n";
+                } catch (const exception& e) {
+                    cerr << "Error saving data: " << e.what() << endl;
+                }
+
+                for (const auto emp : staff) delete emp;
+                return 0;
+            }
+            default: {
+                cout << "Invalid choice. Please enter a number between 1 and 10.\n";
+            }
+        }
+    } while (true);
 }
