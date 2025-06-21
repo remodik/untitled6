@@ -1,7 +1,8 @@
 #include "Engineer.h"
 
 Engineer::Engineer(const int id, const string& name, const string& position, const int salary)
-    : Personal(id, name, position, salary), project(nullptr) {}
+    : Personal(id, name, position, salary), project(nullptr), salary(0) {
+}
 
 void Engineer::setProject(Project* prj) {
     project = prj;

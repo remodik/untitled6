@@ -13,7 +13,7 @@ public:
     ProjectManager(int id, const string& name, const string& position);
     void addProject(Project* prj);
 
-    int calcBudgetPart(double part, int budget) override;
+    int calcBudgetPart(double part, int budget);
 
     int calcProAdditions() override;
 
@@ -24,7 +24,12 @@ public:
 class SeniorManager : public ProjectManager {
 public:
     SeniorManager(int id, const string& name, const string& position);
-    void calc() override;
+    void calc() override {
+        double total = 0.0;
+        for (const auto p : projects) {
+            total += calcBudgetPart(0.1, p->budget);
+        }
+    }
 };
 
 #endif

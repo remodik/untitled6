@@ -4,15 +4,15 @@
 #include "Interfaces.h"
 #include "Project.h"
 
-class Engineer : public Personal, public ProjectBudget {
+class Engineer : public Personal, public ProjectBudget, public WorkBaseTime {
 protected:
     Project* project{};
-
+    double salary;
 public:
     Engineer(int id, const string& name, const string& position, int salary);
     void setProject(Project* prj);
 
-    int calcBudgetPart(double part, int budget) override;
+    static int calcBudgetPart(double part, int budget);
     int calcProAdditions() override = 0;
     void calc() override;
 };
