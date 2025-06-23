@@ -1,45 +1,42 @@
 #ifndef PERSONAL_H
 #define PERSONAL_H
-#include "Interfaces.h"
 #include "Employee.h"
+#include "Interfaces.h"
 
 class Personal : public Employee, public WorkBaseTime {
 protected:
     int salary;
-    int nightBonus = 1000;
-public:
-    Personal(int id, const string& name, const string& position, int salary);
 
-    static double calcBase(int salary, int worktime);
-    double calcBonus() override;
-    void calc() override;
+public:
+    Personal(const int id, string name, string position, const int salary)
+        : Employee(id, std::move(name), std::move(position)), salary(salary) {}
+
+    int calcBase(const int salary, const int wtime) override {
+        return salary * wtime;
+    }
+
+    void calc() override {
+        payment = calcBase(salary, worktime) + calcBonus();
+    }
 };
 
 class Cleaner final : public Personal {
 public:
-    Cleaner(int id, const string& name, int salary);
+    Cleaner(const int id, string name, const int salary) : Personal(id, std::move(name), "cleaner", salary) {}
 
-    double calcBase() override;
+    void calc() override {
+        payment = static_cast<int>(calcBase(salary, worktime) * 0.1);
+    }
+    int calcBonus() override;
+    void printInfo() const override;
 };
 
 class Driver final : public Personal {
-    int nightHours;
 public:
-    Driver(const int id, const string &name, const string &position, const int salary, const int night_hours)
-        : Personal(id, name, position, salary),
-          nightHours(night_hours) {
-    }
+    Driver(const int id, string name, const int salary) : Personal(id, std::move(name), "driver", salary) {}
 
-    Driver(int id, const string &name, int salary);
-
-    void setNightHours(const int hours) {
-        nightHours = hours;
-    }
-    double calcBonus() override {
-        return nightBonus * nightHours;
-    }
-
-    double calcBase() override;
+    int calcBonus() override;
+    void printInfo() const override;
 };
 
 #endif

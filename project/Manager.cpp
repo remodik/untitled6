@@ -1,45 +1,41 @@
 #include "Manager.h"
 
-ProjectManager::ProjectManager(const int id, const string& name, const string& position)
-    : Employee(id, name, position) {}
-
-void ProjectManager::addProject(Project* prj) {
-    projects.push_back(prj);
-}
-
-int ProjectManager::calcBudgetPart(const double part, const int budget) {
-    return static_cast<int>(part * budget);
-}
-
-int ProjectManager::calcProAdditions() {
-    int total = 0;
-    for (const Project* project : projects) {
-        total += static_cast<int>(0.05 * project->budget);
-    }
-    return total;
+int ProjectManager::calcBudgetPart(float, const int budget) {
+    return static_cast<int>(budget * 0.15);
 }
 
 int ProjectManager::calcHeads() {
-    return 0;
+    return 50000;
 }
 
 void ProjectManager::calc() {
     int total = 0;
-    for (const Project* project : projects) {
-        total += calcBudgetPart(0.1, project->budget);
+    for (auto* p : projects) {
+        total += calcBudgetPart(0.15f, p->budget);
     }
-    total += calcHeads();
-    payment = total;
+    payment = total + calcHeads();
 }
 
-SeniorManager::SeniorManager(const int id, const string& name, const string& position)
-    : ProjectManager(id, name, position) {}
+void ProjectManager::printInfo() const {
+    cout << id << "\t" << name << "\tProjectManager\t" << worktime << "\t" << payment << endl;
+}
+
+int SeniorManager::calcBudgetPart(float, const int budget) {
+    return static_cast<int>(budget * 0.05);
+}
+
+int SeniorManager::calcHeads() {
+    return 60000;
+}
 
 void SeniorManager::calc() {
     int total = 0;
-    for (const Project* project : projects) {
-        total += calcBudgetPart(0.05, project->budget);
+    for (const auto* p : projects) {
+        total += calcBudgetPart(0.05f, p->budget);
     }
-    total += calcHeads();
-    payment = total;
+    payment = total + calcHeads();
+}
+
+void SeniorManager::printInfo() const {
+    cout << id << "\t" << name << "\tSeniorManager\t" << worktime << "\t" << payment << endl;
 }

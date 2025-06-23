@@ -1,35 +1,40 @@
-#ifndef MANAGER_H
-#define MANAGER_H
+#pragma once
 #include "Employee.h"
 #include "Interfaces.h"
 #include "Project.h"
 #include <vector>
 
-class ProjectManager : public Employee, public ProjectBudget, public Heading {
+class Manager : public Employee, public ProjectBudget, public Heading {
 protected:
     vector<Project*> projects;
 
 public:
-    ProjectManager(int id, const string& name, const string& position);
-    void addProject(Project* prj);
+    Manager(const int id, string name, string position) : Employee(id, std::move(name), std::move(position)) {}
 
-    int calcBudgetPart(double part, int budget);
-
-    int calcProAdditions() override;
-
-    int calcHeads() override;
-    void calc() override;
-};
-
-class SeniorManager : public ProjectManager {
-public:
-    SeniorManager(int id, const string& name, const string& position);
-    void calc() override {
-        double total = 0.0;
-        for (const auto p : projects) {
-            total += calcBudgetPart(0.1, p->budget);
-        }
+    void addProject(Project* prj) { projects.push_back(prj); }
+    const vector<Project*>& getProjects() const {
+        return projects;
     }
 };
 
-#endif
+class ProjectManager final : public Manager {
+public:
+    ProjectManager(const int id, string name) : Manager(id, std::move(name), "project_manager") {}
+
+    int calcBudgetPart(float part, int budget) override;
+    int calcProAdditions() override { return 0; }
+    int calcHeads() override;
+    void calc() override;
+    void printInfo() const override;
+};
+
+class SeniorManager final : public Manager {
+public:
+    SeniorManager(const int id, string name) : Manager(id, std::move(name), "senior_manager") {}
+
+    int calcBudgetPart(float part, int budget) override;
+    int calcProAdditions() override { return 0; }
+    int calcHeads() override;
+    void calc() override;
+    void printInfo() const override;
+};

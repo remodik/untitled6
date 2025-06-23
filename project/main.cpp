@@ -1,298 +1,225 @@
+#include "Employee.h"
+#include "Factory.h"
 #include <iostream>
 #include <vector>
-#include <string>
-#include <algorithm>
-#include <fstream>
-#include "Employee.h"
 #include "Engineer.h"
-#include "Factory.h"
 #include "Manager.h"
-#include "Project.h"
+#include <iomanip>
 
-using namespace std;
+void printAll(const vector<Employee*>& staff) {
+    cout << left
+              << setw(5) << "ID"
+              << setw(20) << "Name"
+              << setw(20) << "Position"
+              << setw(10) << "Worktime"
+              << setw(15) << "Payment"
+              << "\n";
 
-void addEmployeeToProject(const vector<Employee*>& staff, vector<Project>& projects) {
-    cout << "Enter employee ID: ";
-    int empId;
-    cin >> empId;
-    cin.ignore();
+    cout << setfill('-')
+              << setw(5) << ""
+              << setw(20) << ""
+              << setw(20) << ""
+              << setw(10) << ""
+              << setw(15) << ""
+              << "\n"
+              << setfill(' ');
+
+    for (const auto* emp : staff) {
+        cout << left
+                  << setw(5) << emp->getId()
+                  << setw(20) << emp->getName()
+                  << setw(20) << emp->getPosition()
+                  << setw(10) << emp->getWorktime()
+                  << setw(15) << emp->getPayment()
+                  << "\n";
+    }
+}
+
+void findByProject(const vector<Employee*>& staff, const string& project) {
+    cout << "Employees on project " << project << ":\n";
+    for (auto* emp : staff) {
+        if (const auto e = dynamic_cast<Engineer*>(emp)) {
+            if (e->getProject() && e->getProject()->name == project) {
+                emp->printInfo();
+            }
+        } else if (const auto m = dynamic_cast<Manager*>(emp)) {
+            for (const auto* p : m->getProjects()) {
+                if (p->name == project) {
+                    emp->printInfo();
+                    break;
+                }
+            }
+        }
+    }
+}
+
+void findByPosition(const vector<Employee*>& staff, const string& position) {
+    cout << "Employees with position " << position << ":\n";
+    for (const auto* emp : staff) {
+        if (emp->getPosition() == position) {
+            emp->printInfo();
+        }
+    }
+}
+
+void findByName(const vector<Employee*>& staff, const string& name) {
+    cout << "Employees with name " << name << ":\n";
+    for (const auto* emp : staff) {
+        if (emp->getName().find(name) != string::npos) {
+            emp->printInfo();
+        }
+    }
+}
+
+void createProject() {
+    string name;
+    int budget;
 
     cout << "Enter project name: ";
+    getline(cin, name);
+    cout << "Enter project budget: ";
+    cin >> budget;
+    cin.ignore();
+
+    const auto newProject = new Project{name, budget};
+    StaffFactory::addProject(newProject);
+    cout << "Project " << name << " created successfully.\n";
+}
+
+void addEmployeeToProject(const vector<Employee*>& staff) {
+    int id;
     string projectName;
+
+    cout << "Enter employee ID: ";
+    cin >> id;
+    cin.ignore();
+    cout << "Enter project name: ";
     getline(cin, projectName);
 
-    Employee* foundEmp = nullptr;
-    for (const auto emp : staff) {
-        if (emp->getId() == empId) {
-            foundEmp = emp;
-            break;
-        }
-    }
-
-    if (!foundEmp) {
-        cout << "Employee not found!" << endl;
+    Project* project = StaffFactory::getProject(projectName);
+    if (!project) {
+        cout << "Project not found.\n";
         return;
     }
 
-    Project* targetProject = nullptr;
-    for (auto& prj : projects) {
-        if (prj.name == projectName) {
-            targetProject = &prj;
-            break;
-        }
-    }
-
-    if (!targetProject) {
-        cout << "Project not found!" << endl;
-        return;
-    }
-
-    if (const string position = foundEmp->getPosition(); position == "Programmer" || position == "Tester" || position == "TeamLeader") {
-        if (const auto engineer = dynamic_cast<Engineer*>(foundEmp)) {
-            engineer->setProject(targetProject);
-            engineer->calc();
-            cout << "Engineer added to project successfully!" << endl;
-        }
-    }
-    else if (position == "ProjectManager" || position == "SeniorManager") {
-        if (const auto manager = dynamic_cast<ProjectManager*>(foundEmp)) {
-            manager->addProject(targetProject);
-            manager->calc();
-            cout << "Manager added to project successfully!" << endl;
-        }
-    }
-    else {
-        cout << "This employee type cannot be assigned to projects!" << endl;
-    }
-}
-
-void printMenu() {
-    cout << "\n========== Staff Management System ==========\n";
-    cout << "1. Show all employees\n";
-    cout << "2. Show project employees\n";
-    cout << "3. Search by position\n";
-    cout << "4. Search by name\n";
-    cout << "5. Search by salary (>)\n";
-    cout << "6. Search by salary (<)\n";
-    cout << "7. Create project\n";
-    cout << "8. Add employee to project\n";
-    cout << "9. Change employee's project\n";
-    cout << "10. Save & Exit\n";
-    cout << "Enter your choice (1-10): ";
-}
-
-void assignToProject(Employee* emp, Project* prj) {
-    if (const auto engineer = dynamic_cast<Engineer*>(emp)) {
-        engineer->setProject(prj);
-    } else if (const auto manager = dynamic_cast<ProjectManager*>(emp)) {
-        manager->addProject(prj);
-    } else {
-        cout << "This employee type cannot be assigned to projects.\n";
-    }
-}
-
-Project* findProject(const vector<Project>& projects, const string& name) {
-    for (auto& prj : projects) {
-        if (prj.name == name) return const_cast<Project*>(&prj);
-    }
-    return nullptr;
-}
-
-vector<Employee*> findProjectEmployees(const vector<Employee*>& staff,
-                                     const string& projectName) {
-    vector<Employee*> result;
-
-    for (auto emp : staff) {
-        if (string position = emp->getPosition(); position == "Programmer" ||
-                                                  position == "Tester" ||
-                                                  position == "TeamLeader" ||
-                                                  position == "ProjectManager" ||
-                                                  position == "SeniorManager") {
-            result.push_back(emp);
+    for (auto* emp : staff) {
+        if (emp->getId() == id) {
+            if (auto* engineer = dynamic_cast<Engineer*>(emp)) {
+                engineer->setProject(project);
+                cout << "Employee " << emp->getName() << " added to project " << projectName << ".\n";
+            } else {
+                cout << "Employee " << emp->getName() << " cannot be added to a project.\n";
             }
+            return;
+        }
+    }
+    cout << "Employee not found.\n";
+}
+
+void transferEmployeeToProject(const vector<Employee*>& staff) {
+    int id;
+    string newProjectName;
+
+    cout << "Enter employee ID: ";
+    cin >> id;
+    cin.ignore();
+    cout << "Enter new project name: ";
+    getline(cin, newProjectName);
+
+    Project* newProject = StaffFactory::getProject(newProjectName);
+    if (!newProject) {
+        cout << "Project not found.\n";
+        return;
     }
 
-    return result;
+    for (auto* emp : staff) {
+        if (emp->getId() == id) {
+            if (auto* engineer = dynamic_cast<Engineer*>(emp)) {
+                engineer->setProject(newProject);
+                cout << "Employee " << emp->getName() << " transferred to project " << newProjectName << ".\n";
+            } else {
+                cout << "Employee " << emp->getName() << " cannot be transferred to a project.\n";
+            }
+            return;
+        }
+    }
+    cout << "Employee not found.\n";
+}
+
+void findBySalary(const vector<Employee*>& staff, const int threshold, const bool greater) {
+    cout << "Employees with salary " << (greater ? "> " : "< ") << threshold << ":\n";
+    for (const auto* emp : staff) {
+        if ((greater && emp->getPayment() > threshold) ||
+            (!greater && emp->getPayment() < threshold)) {
+            emp->printInfo();
+        }
+    }
 }
 
 int main() {
     vector<Employee*> staff;
-    vector<Project> projects;
+    const string filename = "staff.txt";
 
     try {
-        staff = StaffFactory::makeStaff("staff.txt");
-        cout << "Loaded " << staff.size() << " employees from file.\n";
+        staff = StaffFactory::makeStaff(filename);
     } catch (const exception& e) {
-        cerr << "Error loading staff: " << e.what() << endl;
+        cerr << "Error: " << e.what() << endl;
         return 1;
     }
 
-    if (projects.empty()) {
-        projects.push_back({"Alpha", 1000000});
-        projects.push_back({"Beta", 750000});
-        projects.push_back({"Gamma", 500000});
+    for (auto* emp : staff) {
+        emp->setWorkTime(160);
     }
 
-    for (const auto emp : staff) {
-        emp->setWorkTime(160);
+    for (auto* emp : staff) {
         emp->calc();
     }
 
-    int choice;
-    do {
-        printMenu();
-        cin >> choice;
-        cin.ignore();
+    string command;
+    while (true) {
+        cout << "\nCommands: all, project, position, name, salary, create_project, add_to_project, transfer_project, save, exit\n> ";
+        getline(cin, command);
 
-        switch (choice) {
-            case 1: {
-                cout << "\n=== All Employees ===\n";
-                cout << "ID\tName\t\tPosition\t\tWorktime\tPayment\n";
-                cout << "--------------------------------------------------------\n";
-                for (const auto emp : staff) {
-                    emp->printInfo();
-                }
-                break;
-            }
-            case 2: {
-                string projectName;
-                cout << "Enter project name: ";
-                getline(cin, projectName);
+        if (command == "exit") break;
 
-                auto projectStaff = findProjectEmployees(staff, projectName);
-                if (projectStaff.empty()) {
-                    cout << "No project employees found.\n";
-                } else {
-                    cout << "=== Project Employees ===\n";
-                    for (const auto emp : projectStaff) {
-                        emp->printInfo();
-                    }
-                }
-                break;
-            }
-            case 3: {
-                string position;
-                cout << "Enter position to search: ";
-                getline(cin, position);
-
-                cout << "\n=== Employees with Position " << position << " ===\n";
-                bool found = false;
-                for (const auto emp : staff) {
-                    if (emp->getPosition() == position) {
-                        emp->printInfo();
-                        found = true;
-                    }
-                }
-                if (!found) cout << "No employees found with position " << position << "\n";
-                break;
-            }
-            case 4: {
-                string name;
-                cout << "Enter name to search: ";
-                getline(cin, name);
-
-                cout << "\n=== Employees Matching \"" << name << "\" ===\n";
-                bool found = false;
-                for (const auto emp : staff) {
-                    if (emp->getName().find(name) != string::npos) {
-                        emp->printInfo();
-                        found = true;
-                    }
-                }
-                if (!found) cout << "No employees found matching \"" << name << "\"\n";
-                break;
-            }
-            case 5: {
-                int salary;
-                cout << "Enter minimum salary: ";
-                cin >> salary;
-
-                cout << "\n=== Employees Earning > $" << salary << " ===\n";
-                bool found = false;
-                for (const auto emp : staff) {
-                    if (emp->getPayment() > salary) {
-                        emp->printInfo();
-                        found = true;
-                    }
-                }
-                if (!found) cout << "No employees earn more than $" << salary << "\n";
-                break;
-            }
-            case 6: {
-                int salary;
-                cout << "Enter maximum salary: ";
-                cin >> salary;
-
-                cout << "\n=== Employees Earning < $" << salary << " ===\n";
-                bool found = false;
-                for (const auto emp : staff) {
-                    if (emp->getPayment() < salary) {
-                        emp->printInfo();
-                        found = true;
-                    }
-                }
-                if (!found) cout << "No employees earn less than $" << salary << "\n";
-                break;
-            }
-            case 7: {
-                string name;
-                int budget;
-                cout << "Enter new project name: ";
-                getline(cin, name);
-                cout << "Enter project budget: $";
-                cin >> budget;
-
-                projects.push_back({name, budget});
-                cout << "Project '" << name << "' created with budget $" << budget << "\n";
-                break;
-            }
-            case 8: {
-                addEmployeeToProject(staff, projects);
-                break;
-            }
-            case 9: {
-                int empId;
-                string newProjectName;
-                cout << "Enter employee ID to change project: ";
-                cin >> empId;
-                cin.ignore();
-
-                auto it = ranges::find_if(staff,
-                                          [empId](const Employee* e) { return e->getId() == empId; });
-
-                if (it == staff.end()) {
-                    cout << "Employee with ID " << empId << " not found.\n";
-                    break;
-                }
-
-                cout << "Enter new project name: ";
-                getline(cin, newProjectName);
-
-                Project* newPrj = findProject(projects, newProjectName);
-                if (!newPrj) {
-                    cout << "Project '" << newProjectName << "' not found.\n";
-                    break;
-                }
-
-                assignToProject(*it, newPrj);
-                (*it)->calc();
-                cout << "Employee " << (*it)->getName() << " moved to project " << newProjectName << "\n";
-                break;
-            }
-            case 10: {
-                try {
-                    StaffFactory::saveStaff("staff_updated.txt", staff);
-                    cout << "Data saved successfully. Exiting...\n";
-                } catch (const exception& e) {
-                    cerr << "Error saving data: " << e.what() << endl;
-                }
-
-                for (const auto emp : staff) delete emp;
-                return 0;
-            }
-            default: {
-                cout << "Invalid choice. Please enter a number between 1 and 10.\n";
-            }
+        if (command == "all") {
+            printAll(staff);
+        } else if (command == "project") {
+            cout << "Enter project name: ";
+            string project;
+            getline(cin, project);
+            findByProject(staff, project);
+        } else if (command == "position") {
+            cout << "Enter position: ";
+            string position;
+            getline(cin, position);
+            findByPosition(staff, position);
+        } else if (command == "name") {
+            cout << "Enter name: ";
+            string name;
+            getline(cin, name);
+            findByName(staff, name);
+        } else if (command == "salary") {
+            cout << "Enter threshold: ";
+            int threshold;
+            cin >> threshold;
+            cin.ignore();
+            cout << "Greater (1) or less (0)? ";
+            bool greater;
+            cin >> greater;
+            cin.ignore();
+            findBySalary(staff, threshold, greater);
+        } else if (command == "create_project") {
+            createProject();
+        } else if (command == "add_to_project") {
+            addEmployeeToProject(staff);
+        } else if (command == "transfer_project") {
+            transferEmployeeToProject(staff);
+        } else if (command == "save") {
+            StaffFactory::saveToFile(filename, staff);
+            cout << "Data saved to " << filename << endl;
         }
-    } while (true);
+    }
+
+    for (const auto* emp : staff) delete emp;
 }
