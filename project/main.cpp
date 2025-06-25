@@ -5,6 +5,9 @@
 #include "Engineer.h"
 #include "Manager.h"
 #include <iomanip>
+#include <algorithm>
+#include <cctype>
+#include <format>
 
 void printAll(const vector<Employee*>& staff) {
     cout << left
@@ -63,11 +66,16 @@ void findByPosition(const vector<Employee*>& staff, const string& position) {
 }
 
 void findByName(const vector<Employee*>& staff, const string& name) {
-    cout << "Employees with name " << name << ":\n";
+    cout << format("Employees with name {0}:\n", name);
+
+    string lowerName = name;
+    ranges::transform(lowerName, lowerName.begin(), ::tolower);
+
     for (const auto* emp : staff) {
-        if (emp->getName().find(name) != string::npos) {
-            emp->printInfo();
-        }
+        string empName = emp->getName();
+        ranges::transform(empName, empName.begin(), ::tolower);
+
+        if (empName.rfind(lowerName, 0) == 0) emp->printInfo();
     }
 }
 

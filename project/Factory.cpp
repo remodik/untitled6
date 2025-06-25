@@ -75,7 +75,6 @@ vector<Employee*> StaffFactory::makeStaff(const string& filename) {
     return staff;
 }
 
-// void StaffFactory::saveToFile(const string &filename, const vector<Employee*>& staff) {
 void StaffFactory::saveToFile(const string &filename, const vector<Employee *> &staff) {
     ofstream file(filename);
     if (!file.is_open()) {
@@ -89,6 +88,5 @@ void StaffFactory::saveToFile(const string &filename, const vector<Employee *> &
              << emp->getWorktime() << ";"
              << emp->getPayment() << std::endl;
     }
-
     file.close();
 }
